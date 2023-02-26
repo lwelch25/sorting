@@ -2,7 +2,7 @@
 [![](https://github.com/lwelch25/sorting/workflows/tests/badge.svg)](https://github.com/lwelch25/sorting/actions?query=workflow%3Atests)
 [![](https://github.com/lwelch25/sorting/workflows/extra_credit/badge.svg)](https://github.com/lwelch25/sorting/actions?query=workflow%3Atests)
 
-You will implement the merge and quick sort algorithms.
+YYou will implement the merge and quick sort algorithms.
 
 **Learning Objectives:**
 
