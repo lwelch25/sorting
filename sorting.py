@@ -57,6 +57,14 @@ def cmp_last_digit(a, b):
 
 
 def _merged(xs, ys, cmp=cmp_standard):
+    if not xs: 
+        return ys
+    if not ys: 
+        return xs
+    if cmp(xs[0], ys[0]) < 0:
+        return [xs[0]] + _merged(xs[1:], ys, cmp)
+    else: 
+        return [ys[0]]+_merged(xs, ys[1:], cmp)
     '''
     Assumes that both xs and ys are sorted,
     and returns a new list containing the elements of both xs and ys.
@@ -80,6 +88,16 @@ def _merged(xs, ys, cmp=cmp_standard):
 
 
 def merge_sorted(xs, cmp=cmp_standard):
+    if len(xs) == 1:
+        return xs
+    else: 
+        mid = len(xs)//2
+        left = xs[:mid]
+        right = xs[mid:]
+        left_sorted = merge_sorted(left, cmp=cmp)
+        right_sorted = merge_sorted(right, cmp=cmp) 
+        return _merged(left_sorted, right_sorted, cmp=cmp)
+        
     '''
     Merge sort is the standard O(n log n) sorting algorithm.
     Recall that the merge sort pseudo code is:
@@ -98,6 +116,15 @@ def merge_sorted(xs, cmp=cmp_standard):
 
 
 def quick_sorted(xs, cmp=cmp_standard):
+    if len(xs) == 1:
+        return xs
+    else:
+        pivot = xs[0]
+        less_than = [x for x in xs[1:] if cmp(x,pivot) < 0]
+        greater_than = [x for x in xs[1:] if cmp(x, pivot) > 0]
+        equal_to = [x for x in xs[1:] if cmp(x, pivot) == 0] 
+        return quick_sorted(less_than, cmp) + equal_to + quick_sorted(greater_than, cmp)
+
     '''
     Quicksort is like mergesort,
     but it uses a different strategy to split the list.
@@ -123,6 +150,23 @@ def quick_sorted(xs, cmp=cmp_standard):
 
 
 def quick_sort(xs, cmp=cmp_standard):
+    def _partition(left, right):
+        pivot = xs[right]
+        i = left - 1
+        for j in range(left, right):
+            if cmp(xs[j], pivot) <= 0: 
+                i += 1
+                xs[i], xs[j] = xs[j], xs[i]
+        xs[i+1], xs[right] = xs[right], xs[i+1] 
+        return i+1
+
+    def _quick_sort(left, right): 
+        if left < right:
+            pivot_index = _partition(left, right)
+            _quick_sort(left, pivot_index-1)
+            _quick_sort(pivot_index+1, right)
+
+    _quick_sort(0, len(xs)-1)
     '''
     EXTRA CREDIT:
     The main advantage of quick_sort is that it can be implemented "in-place".
