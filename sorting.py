@@ -57,14 +57,23 @@ def cmp_last_digit(a, b):
 
 
 def _merged(xs, ys, cmp=cmp_standard):
-    if not xs: 
-        return ys
-    if not ys: 
-        return xs
-    if cmp(xs[0], ys[0]) < 0:
-        return [xs[0]] + _merged(xs[1:], ys, cmp)
-    else: 
-        return [ys[0]]+_merged(xs, ys[1:], cmp)
+    ixs = 0 
+    iys = 0
+    ret = []
+    while ixs < len(xs) and iys < len(ys):
+        if cmp(xs[ixs], ys[iys]) == -1: 
+            ret.append(xs[ixs])
+            ixs += 1
+        else:
+            ret.append(ys[iys])
+            iys += 1
+    while ixs < len(xs):
+        ret.append(xs[ixs])
+        ixs += 1
+    while iys < len(ys):
+        ret.append(ys[iys])
+        iys += 1
+    return ret 
     '''
     Assumes that both xs and ys are sorted,
     and returns a new list containing the elements of both xs and ys.
@@ -88,14 +97,14 @@ def _merged(xs, ys, cmp=cmp_standard):
 
 
 def merge_sorted(xs, cmp=cmp_standard):
-    if len(xs) == 1:
+    if len(xs) <= 1:
         return xs
     else: 
-        mid = len(xs)//2
-        left = xs[:mid]
-        right = xs[mid:]
+        mid = len(xs) // 2
+        left = xs[mid:]
+        right = xs[:mid]
         left_sorted = merge_sorted(left, cmp=cmp)
-        right_sorted = merge_sorted(right, cmp=cmp) 
+        right_sorted = merge_sorted(right, cmp=cmp)
         return _merged(left_sorted, right_sorted, cmp=cmp)
         
     '''
@@ -116,14 +125,17 @@ def merge_sorted(xs, cmp=cmp_standard):
 
 
 def quick_sorted(xs, cmp=cmp_standard):
-    if len(xs) == 1:
-        return xs
-    else:
-        pivot = xs[0]
-        less_than = [x for x in xs[1:] if cmp(x,pivot) < 0]
-        greater_than = [x for x in xs[1:] if cmp(x, pivot) > 0]
-        equal_to = [x for x in xs[1:] if cmp(x, pivot) == 0] 
-        return quick_sorted(less_than, cmp) + equal_to + quick_sorted(greater_than, cmp)
+    if len(xs) <= 1:
+        return xs 
+    else: 
+        mid = len(xs) // 2
+        pivot = xs[mid]
+        xs_less = [x for x in xs if cmp(x, pivot) == -1]
+        xs_greater = [x for x in xs if cmp(x, pivot) == 1]
+        xs_equals = [x for x in xs if cmp(x, pivot) == 0]
+        xs_less = quick_sorted(xs_less, cmp=cmp)
+        xs_greater = quick_sorted(xs_greater, cmp=cmp)
+        return xs_less + xs_equals + xs_greater
 
     '''
     Quicksort is like mergesort,
@@ -175,13 +187,16 @@ def quick_sort(xs, cmp=cmp_standard):
     Merge sort, on the other hand, must allocate intermediate lists for the merge step,
     and has a Theta(n) memory requirement.
     Even though quick sort and merge sort both have the same Theta(n log n) runtime,
-    this more efficient memory usage typically makes quick sort faster in practice.
+    this more efficient memory usage typically makes quick sort faster in 
+    practice.
     (We say quick sort has a lower "constant factor" in its runtime.)
-    The downside of implementing quick sort in this way is that it will no longer be a [stable sort](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability),
+    The downside of implementing quick sort in this way is that it will no lo
+    nger be a [stable sort](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability),
     but this is typically inconsequential.
 
     Follow the pseudocode of the Lomuto partition scheme given on wikipedia
     (https://en.wikipedia.org/wiki/Quicksort#Algorithm)
     to implement quick_sort as an in-place algorithm.
-    You should directly modify the input xs variable instead of returning a copy of the list.
+    You should directly modify the input xs variable instea
+    d of returning a copy of the list.
     '''
