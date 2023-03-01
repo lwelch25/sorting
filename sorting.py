@@ -174,16 +174,16 @@ def quick_sort(xs, cmp=cmp_standard):
             if cmp(xs[j], pivot) <= 0:
                 i += 1
                 xs[i], xs[j] = xs[j], xs[i]
-        xs[i+1], xs[right] = xs[right], xs[i+1]
-        return i+1
+        xs[i + 1], xs[right] = xs[right], xs[i + 1]
+        return i + 1
 
     def _quick_sort(left, right):
         if left < right:
             pivot_index = _partition(left, right)
-            _quick_sort(left, pivot_index-1)
-            _quick_sort(pivot_index+1, right)
+            _quick_sort(left, pivot_index - 1)
+            _quick_sort(pivot_index + 1, right)
 
-    _quick_sort(0, len(xs)-1)
+    _quick_sort(0, len(xs) - 1)
     '''
     EXTRA CREDIT:
     The main advantage of quick_sort is that it can be implemented "in-place".
